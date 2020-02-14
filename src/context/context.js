@@ -1,0 +1,48 @@
+import React, { Component } from "react";
+import {linkData} from "./linkData"
+const ProductContext = React.createContext();
+//Provider
+//Consumer
+class ProductProvider extends Component {
+    state ={
+        sidebarOpen:false,
+        cartOpen:false,
+        cartItmes:0,
+        links:linkData,
+        cart:[]
+    }
+    //Handle Side bar
+    handleSidebar=()=>{
+        this.setState({sidebarOpen:!this.state.sidebarOpen})
+    }
+    //Handle Cart
+    handleCart=()=>{
+        this.setState({cartOpen:!this.state.cartOpen})
+    }
+    //open cart 
+    openCart=()=>{
+        this.setState({cartOpen:true})
+    }
+    //close cart
+    closeCart=()=>{
+        this.setState({cartOpen:false})
+    }
+
+  render() {
+    return (
+      <ProductContext.Provider value={{
+        ...this.state,
+        handleSidebar:this.handleSidebar,
+        handleCart:this.handleCart,
+        openCart:this.openCart,
+        closeCart:this.closeCart
+      }}>
+        {this.props.children}
+      </ProductContext.Provider>
+    );
+  }
+}
+
+const ProductConsumer = ProductContext.Consumer;
+
+export { ProductProvider, ProductConsumer };
