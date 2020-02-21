@@ -1,38 +1,62 @@
-import React,{Component} from 'react';
-import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css'
-import Home from "./pages/HomePage"
-import About from "./pages/AboutPage"
-import Product from "./pages/ProductPage"
-import Contact from "./pages/ContactPage"
-import SingleProduct from "./pages/SingleProductPage"
-import Default from "./pages/DefaultPage"
-import Cart from "./pages/CartPage";
-import {Route,Switch} from "react-router-dom";
+import React, { Component } from "react";
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { ProductConsumer } from "../src/context/context";
 
-import Navbar from "./components/Navbar"
-import SideBar from "./components/SideBar"
-import SideCart from "./components/SideCart"
-import Footer from "./components/Footer"
+import Home from "./pages/HomePage";
+import About from "./pages/AboutPage";
+import Products from "./pages/ProductsPage";
+import Contact from "./pages/ContactPage";
+import SingleProduct from "./pages/SingleProductPage";
+import Cart from "./pages/CartPage.js";
+import Default from "./pages/Default.js";
 
-class App extends Component{
-  render(){
-    return<>
-      {/* Navbar,sidebar,cart,footer */}
-      <Navbar />
-      <SideBar />
-      <SideCart />
-      <Switch>
-        <Route path="/" exact component={Home} />
-        <Route path="/about" exact component={About} />
-        <Route path="/product" exact component={Product} />
-        <Route path="/contact" exact component={Contact} />
-        <Route path="/product/:id" exact component={SingleProduct} />
-        <Route path="/cart" exact component={Cart} />
-        <Route  component={Default} />
-      </Switch>
-      <Footer />
-    </>
+import { Route, Switch } from "react-router-dom";
+
+import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
+import SideCart from "./components/SideCart";
+import Footer from "./components/Footer";
+class App extends Component {
+  render() {
+    return (
+      <ProductConsumer>
+        {value=>{
+         if(value.redirect===true){
+           return(
+             <>
+                <Navbar />
+                <Sidebar />
+                <SideCart />
+                <Route component={Products} />
+                <Footer />
+             </>
+
+           )
+         }else{
+            return (
+              <>
+              {/* navbar, sidebar, cart,footer*/}
+              <Navbar />
+              <Sidebar />
+              <SideCart />
+              <Switch>
+                <Route path="/" exact component={Home} />
+                <Route path="/about" component={About} />
+                <Route path="/contact" component={Contact} />
+                <Route path="/products" exact component={Products} />
+                <Route path="/products/:id" component={SingleProduct} />
+                <Route path="/cart" component={Cart} />
+                <Route component={Default} />
+              </Switch>
+              <Footer />
+            </>
+            )
+         }
+        }}
+      </ProductConsumer>
+      
+    );
   }
 }
 
